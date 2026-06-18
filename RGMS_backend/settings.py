@@ -49,8 +49,9 @@ MIDDLEWARE = [
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://localhost:5174',
+    "https://rgms-frontend.vercel.app",
+    "https://rgms-brands.com",
+    "https://www.rgms-brands.com",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = DEBUG  # En dev autorise tout, en prod seulement les origins listées

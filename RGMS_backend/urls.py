@@ -10,16 +10,19 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-# JWT
+    
+    # JWT
     path('api/auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
 
-# Apps
-
+    # Apps
     path('api/products/', include('products.urls')),
     path('api/users/', include('users.urls')),
     path('api/orders/', include('orders.urls')),
+    
+    # Blog / Vlog (SEO)
+    path('', include('blog.urls')), # Inclut les routes api/vlog/ et api/vlog/<slug>/
 ]
 
 # Pour servir les images en développement

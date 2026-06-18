@@ -127,6 +127,10 @@ CSRF_TRUSTED_ORIGINS = [
     "http://api.rgms-brand.com",
 ]
 
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 # Internationalization
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Europe/Paris'

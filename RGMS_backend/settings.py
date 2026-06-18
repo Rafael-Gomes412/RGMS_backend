@@ -28,13 +28,21 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
+    
+    # Priorité absolue à staticfiles pour WhiteNoise (gère l'administration CSS)
     'django.contrib.staticfiles',
+    
+    # Stockage persistant Cloudinary pour tes images médias
+    'cloudinary_storage',
     'cloudinary',
+    
+    # Librairies tierces & API
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    
+    # Applications internes RGMS
     'products',
     'orders',
     'users',
@@ -45,7 +53,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # ← Fichiers statiques interceptés au plus tôt
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Intercepte le CSS au plus tôt
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -62,7 +70,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.rgms-brand.com",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = DEBUG  # En dev autorise tout, en prod seulement les origins listées
+CORS_ALLOW_ALL_ORIGINS = DEBUG
 
 ROOT_URLCONF = 'RGMS_backend.urls'
 
@@ -88,7 +96,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=not DEBUG,  # SSL en production uniquement
+        ssl_require=not DEBUG,
     )
 }
 
@@ -129,30 +137,27 @@ CSRF_TRUSTED_ORIGINS = [
     "http://api.rgms-brand.com",
 ]
 
-# Gestion de la sécurisation derrière le proxy de Railway
+# Configuration Proxy SSL (Railway)
 if not DEBUG:
-    # Dit à Django qu'il est derrière un proxy sécurisé (règle le problème de CSS et de redirection)
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    
-    # On commente ou supprime le redirect pour casser la boucle infinie
     SECURE_SSL_REDIRECT = False  
-    
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
 # Internationalization
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (WhiteNoise optimisé pour la production)
+# Static Files Configuration (WhiteNoise)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
-# Media files
+# Media Files Configuration (Cloudinary Storage)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

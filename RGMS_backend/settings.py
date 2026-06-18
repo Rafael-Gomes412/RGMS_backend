@@ -1,51 +1,22 @@
-
 from pathlib import Path
-from dotenv import load_dotenv
 import os
 from datetime import timedelta
 import dj_database_url
 
-
-
-load_dotenv()
+# Charge le .env uniquement en local
+if os.path.exists('.env'):
+    from dotenv import load_dotenv
+    load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# REST Framework Settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-}
-
-
-# Simple JWT Settings
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'AUTH_HEADER_TYPES': ('Bearer',)
-}
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY
 SECRET_KEY = os.getenv('SECRET_KEY')
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'True'
-
-ALLOWED_HOSTS = ["*"]
-
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = ['*']
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,25 +25,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'products',
     'orders',
     'users',
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
-    'corsheaders',
 ]
-
-
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ← fichiers statiques
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,11 +47,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Autorise le frontend React
+# CORS
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://localhost:5174',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = DEBUG  # En dev autorise tout, en prod seulement les origins listées
 
 ROOT_URLCONF = 'RGMS_backend.urls'
 
@@ -106,46 +74,59 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'RGMS_backend.wsgi.application'
 
+# Database
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
-        conn_max_age=600
+        conn_max_age=600,
+        ssl_require=not DEBUG,  # SSL en production uniquement
     )
 }
 
-STRIPE_PUBLIC_KEY = os.getenv('STRIPE_SECRET_KEY')
+# REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+# Simple JWT
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+# Stripe
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')   # ← corrigé !
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
-
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+LANGUAGE_CODE = 'fr-fr'
+TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
-
 USE_TZ = True
 
+# Static files
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-STATIC_URL = 'static/'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

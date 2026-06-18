@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = [
-    "api.rgms-brands.com",
+    "api.rgms-brand.com",
     "rgmsbackend.railway.internal",
     "localhost",
     "127.0.0.1",
@@ -54,8 +54,8 @@ MIDDLEWARE = [
 # CORS
 CORS_ALLOWED_ORIGINS = [
     "https://rgms-frontend.vercel.app",
-    "https://rgms-brands.com",
-    "https://www.rgms-brands.com",
+    "https://rgms-brand.com",
+    "https://www.rgms-brand.com",
 ]
 
 CORS_ALLOW_ALL_ORIGINS = DEBUG  # En dev autorise tout, en prod seulement les origins listées

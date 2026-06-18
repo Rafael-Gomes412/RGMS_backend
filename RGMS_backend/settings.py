@@ -119,7 +119,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://api.rgms-brand.com",
+    "http://api.rgms-brand.com",  # On ajoute la version http non-sécurisée temporaire
+]
 # Internationalization
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Europe/Paris'

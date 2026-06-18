@@ -127,8 +127,14 @@ CSRF_TRUSTED_ORIGINS = [
     "http://api.rgms-brand.com",
 ]
 
+# Gestion de la sécurisation derrière le proxy de Railway
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    # Dit à Django qu'il est derrière un proxy sécurisé (règle le problème de CSS et de redirection)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+    # On commente ou supprime le redirect pour casser la boucle infinie
+    SECURE_SSL_REDIRECT = False  
+    
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 # Internationalization

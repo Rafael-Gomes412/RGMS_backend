@@ -29,9 +29,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     
-    # 1. CLOUDINARY EN PREMIER (Indispensable pour intercepter les fichiers médias)
+    # Priorité à staticfiles pour garder le CSS de l'admin parfait (WhiteNoise)
+    'django.contrib.staticfiles',  
+    
+    # Modules Cloudinary isolés pour tes fichiers médias
     'cloudinary_storage',
-    'django.contrib.staticfiles',  # WhiteNoise reste ici pour le CSS
     'cloudinary',
     
     # Librairies tierces & API
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'users',
     'blog',
 ]
+
 AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
@@ -147,12 +150,12 @@ TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_TZ = True
 
-# Static Files Configuration (WhiteNoise)
+# Static Files Configuration (Gérés EXCLUSIVEMENT par WhiteNoise)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
-# Media Files Configuration (Cloudinary Storage)
+# Media Files Configuration (Gérés EXCLUSIVEMENT par Cloudinary)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

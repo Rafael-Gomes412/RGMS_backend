@@ -28,21 +28,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    
-    # Priorité absolue à staticfiles pour WhiteNoise (gère l'administration CSS)
+    'cloudinary_storage',           # ← AVANT staticfiles !
     'django.contrib.staticfiles',
-    
-    # Stockage persistant Cloudinary pour tes images médias
-    'cloudinary_storage',
     'cloudinary',
-    
-    # Librairies tierces & API
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    
-    # Applications internes RGMS
     'products',
     'orders',
     'users',

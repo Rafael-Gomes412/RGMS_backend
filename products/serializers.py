@@ -31,9 +31,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            request = self.context.get('request')
-            if request:
-                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url  # Cloudinary génère l'URL automatiquement
         return None
 
 
@@ -54,9 +52,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            request = self.context.get('request')
-            if request:
-                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url  # Cloudinary génère l'URL automatiquement
         return None
 
 
@@ -70,7 +66,5 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            request = self.context.get('request')
-            if request:
-                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url  # Cloudinary génère l'URL automatiquement
         return None

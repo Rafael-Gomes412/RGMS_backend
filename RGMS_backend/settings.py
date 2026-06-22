@@ -28,12 +28,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
+    
     # Priorité absolue à staticfiles pour WhiteNoise (gère l'administration CSS)
     'django.contrib.staticfiles',
     
     # Stockage persistant Cloudinary pour tes images médias
-    
+    'cloudinary_storage',
     'cloudinary',
     
     # Librairies tierces & API

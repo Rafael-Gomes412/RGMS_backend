@@ -174,5 +174,4 @@ CLOUDINARY_STORAGE = {
     'API_KEY': '712961685285657',
     'API_SECRET': 'V979OKeE5o8PMBdSKdlEx8x0P7k'
 }
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

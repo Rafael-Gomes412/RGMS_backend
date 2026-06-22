@@ -29,11 +29,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     
-    # Priorité absolue à staticfiles pour WhiteNoise (gère l'administration CSS)
-    'django.contrib.staticfiles',
-    
-    # Stockage persistant Cloudinary pour tes images médias
+    # 1. CLOUDINARY EN PREMIER (Indispensable pour intercepter les fichiers médias)
     'cloudinary_storage',
+    'django.contrib.staticfiles',  # WhiteNoise reste ici pour le CSS
     'cloudinary',
     
     # Librairies tierces & API
@@ -48,7 +46,6 @@ INSTALLED_APPS = [
     'users',
     'blog',
 ]
-
 AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [

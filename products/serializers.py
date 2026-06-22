@@ -1,18 +1,15 @@
 from rest_framework import serializers
 from .models import Category, Product, Size, ProductVariant, ProductImage
 
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug']
 
-
 class SizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Size
         fields = ['id', 'name']
-
 
 class ProductVariantSerializer(serializers.ModelSerializer):
     size = SizeSerializer()
@@ -20,7 +17,6 @@ class ProductVariantSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductVariant
         fields = ['id', 'size', 'stock']
-
 
 class ProductImageSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
@@ -31,9 +27,8 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return obj.image.url  # Cloudinary génère l'URL automatiquement
+            return obj.image.url
         return None
-
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
@@ -52,9 +47,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return obj.image.url  # Cloudinary génère l'URL automatiquement
+            return obj.image.url
         return None
-
 
 class ProductListSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
@@ -66,5 +60,5 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         if obj.image:
-            return obj.image.url  # Cloudinary génère l'URL automatiquement
+            return obj.image.url
         return None

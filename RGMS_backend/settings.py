@@ -150,18 +150,29 @@ TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_TZ = True
 
-# Static Files Configuration (Gérés EXCLUSIVEMENT par WhiteNoise)
+# Fichiers Statiques (WhiteNoise)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
-# Media Files Configuration (Gérés EXCLUSIVEMENT par Cloudinary)
+# Fichiers Médias (Cloudinary)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# Configuration moderne exigée par Django pour séparer distinctement les stockages
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
+    },
+}
+
+# Paramètres Cloudinary forcés en direct (Évite les problèmes d'environnement Railway)
 CLOUDINARY_STORAGE = {
-    'CLOUDINARY_URL': os.getenv('CLOUDINARY_URL')
+    'CLOUD_NAME': 'dbyenr2ij',
+    'API_KEY': '712961685285657',
+    'API_SECRET': 'V979OKeE5o8PMBdSKdlEx8x0P7k'
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
